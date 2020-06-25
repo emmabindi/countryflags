@@ -1,26 +1,42 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Country from './Country';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  async componentDidMount() {
+    const response = await fetch('https://restcountries.eu/rest/v2/all');
+    const countries = await response.json();
+    this.setState( {countries: countries} )
+    console.log(this.state)
+  }
+
+  render() {
+    const countries = this.state?.countries;
+    return (
+      <div className="App">
+        <p>250 Countries with their Flags!</p>
+      {countries && 
+      countries.map((country, index) => {
+        return (
+        <Country key={index}
+        name={country.name}
+        flag={country.flag}
+        />
+      );
+      })}
+      </div>
+    );
+  }
 }
 
 export default App;
+
+
+
+  // fetch('https://restcountries.eu/rest/v2/all')
+  // .then((response) => {
+  //   return response.json();
+  // })
+  // .then((data) => {
+  //   console.log(data)
+// })
